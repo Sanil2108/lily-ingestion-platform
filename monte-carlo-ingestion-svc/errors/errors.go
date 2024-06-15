@@ -4,6 +4,12 @@ import (
 	"net/http"
 )
 
+// NewUnauthorizedError returns BaseError with HTTP status 401
+func NewUnauthorizedError(modifiers ...func(BaseError)) BaseError {
+	modifiers = append(modifiers, WithStatusCode(http.StatusUnauthorized))
+	return NewBaseError(modifiers...)
+}
+
 // NewBadRequestError returns BaseError with HTTP status 400
 func NewBadRequestError(modifiers ...func(BaseError)) BaseError {
 	modifiers = append(modifiers, WithStatusCode(http.StatusBadRequest))

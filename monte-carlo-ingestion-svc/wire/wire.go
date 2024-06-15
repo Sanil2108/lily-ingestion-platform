@@ -8,9 +8,9 @@ import (
 	"monte-carlo-ingestion/config"
 	"monte-carlo-ingestion/controllers"
 	"monte-carlo-ingestion/logger"
-	"monte-carlo-ingestion/services"
-	// mockresources "monte-carlo-ingestion/mocks/mock-resources"
+	mockresources "monte-carlo-ingestion/mocks"
 	"monte-carlo-ingestion/resources"
+	"monte-carlo-ingestion/services"
 
 	googlewire "github.com/google/wire"
 )
@@ -40,8 +40,21 @@ func InitializeApplication() (app.App, error) {
 	return &app.HTTPApp{}, nil
 }
 
-func InitializaIngestionControllerWithMocks() (app.App, error) {
-	return &app.HTTPApp{}, nil
+func InitializaIngestionControllerWithMocks() (controllers.IngestionController, error) {
+	googlewire.Build(
+		logger.NewLogger,
+
+		// ---------------------- Resources ----------------------
+		mockresources.NewTemporal,
+		googlewire.Bind(new(resources.Temporal), new(*mockresources.TemporalImpl)),
+
+		// ---------------------- Controllers ----------------------
+		controllers.NewIngestionController,
+
+		// ---------------------- Services ----------------------
+		services.NewIngestionService,
+	)
+	return controllers.IngestionController{}, nil
 }
 
 func InitializaHealthControllerWithMocks() (controllers.HealthController, error) {

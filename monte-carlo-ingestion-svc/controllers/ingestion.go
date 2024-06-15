@@ -14,11 +14,7 @@ type IngestionController struct {
 
 func (ingestionController *IngestionController) NewRequest() *domain.Request {
 	return &domain.Request{
-		Body: &domain.IngestionRequest{
-			APIKey: "",
-		},
-		Headers: map[string]*string{
-		},
+		Body: &domain.IngestionRequest{},
 	}
 }
 
@@ -26,7 +22,7 @@ func (ingestionController *IngestionController) Handler(ctx context.Context, req
 	ingestionRequest := req.Body.(*domain.IngestionRequest)
 
 	response, err := ingestionController.ingestionService.Ingest(*ingestionRequest)
-	
+
 	return response, err
 }
 
