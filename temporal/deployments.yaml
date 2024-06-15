@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-deployment
+  namespace: temporal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: temporal
+        - name: POSTGRES_USER
+          value: temporal
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgresql-data
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-deployment
+  namespace: temporal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      containers:
+      - name: temporal
+        image: temporalio/auto-setup:1.22.6
+        ports:
+        - containerPort: 7233
+        env:
+        - name: DB
+          value: postgresql
+        - name: DB_PORT
+          value: "5432"
+        - name: POSTGRES_USER
+          value: temporal
+        - name: POSTGRES_PWD
+          value: temporal
+        - name: POSTGRES_SEEDS
+          value: postgresql
+        - name: DYNAMIC_CONFIG_FILE_PATH
+          value: config/dynamicconfig/development-sql.yaml
+        - name: BIND_ON_IP
+          value: 127.0.0.1
+        volumeMounts:
+        - name: temporal-sql-config
+          mountPath: /etc/temporal/config/dynamicconfig/
+      volumes:
+      - name: temporal-sql-config
+        configMap:
+          name: temporal-sql-config
+          items:
+          - key: config.yaml
+            path: development-sql.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-ui-deployment
+  namespace: temporal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal-ui
+  template:
+    metadata:
+      labels:
+        app: temporal-ui
+    spec:
+      containers:
+      - name: temporal-ui
+        image: temporalio/ui:2.22.3
+        ports:
+        - containerPort: 8080
+        env:
+        - name: TEMPORAL_ADDRESS
+          value: temporal-service:7233
+        - name: TEMPORAL_CORS_ORIGINS
+          value: http://localhost:3000
