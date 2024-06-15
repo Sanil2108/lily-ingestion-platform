@@ -1,0 +1,41 @@
+name: Unit Tests
+on:
+  push:
+    branches:
+      - prod 
+      - main
+      - master 
+      - feat/workflows
+  pull_request:
+    branches:
+      - prod
+      - main
+      - master
+
+  workflow_dispatch:
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19'
+
+      - name: Setup wire
+        run: go install github.com/google/wire/cmd/wire@latest
+
+      - name: Install dependencies
+        run: go mod tidy
+      
+      - name: Run Tests
+        run: ./scripts/test.sh
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with: 
+          token: f17affb5-c555-483a-bf73-f8fd160db924
+
