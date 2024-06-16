@@ -1,15 +1,5 @@
 #!/bin/bash
 
-cd authentication-plugin/
-luarocks make
-luarocks pack kong-plugin-authentication '1.0-1'
-cd ..
-
-rm -rf plugins
-mkdir plugins
-
-mv authentication-plugin/kong-plugin-authentication-1.0-1.all.rock plugins/
-
 eval $(minikube docker-env | grep -v "│" | grep -v "─")
 
 docker build -t gateway .

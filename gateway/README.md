@@ -6,10 +6,6 @@ This directory contains the necessary configurations and scripts to set up the K
 .
 ├── Dockerfile                     # Dockerfile for Kong setup
 ├── README.md                      # This file
-├── authentication-plugin          # Custom authentication plugin for Kong
-│   ├── handler.lua                # Plugin handler code
-│   ├── kong-plugin-authentication-1.0-1.rockspec # Plugin specification
-│   └── schema.lua                 # Plugin schema definition
 ├── configmaps.yaml                # ConfigMaps for Kong configuration
 ├── deploy.sh                      # Script to deploy Kong Gateway and plugins
 ├── deployment.yaml                # Deployment configuration for Kong
@@ -35,15 +31,3 @@ cd kong-gateway-setup
 ```
 ./deploy.sh
 ```
-
-This script will:
-
-1. Build the custom authentication plugin using Luarocks.
-2. Package the custom authentication plugin and move it to the plugins directory.
-3. Set up the Docker environment for Minikube.
-4. Build the Docker image for the Kong Gateway.
-5. Apply the ConfigMaps for Kong configuration.
-6. Create the namespace for Kong.
-7. Apply the secrets for Kong configuration.
-8. Deploy the Kong Gateway using the deployment.yaml file.
-9. Create the service for Kong Gateway.
