@@ -2,18 +2,8 @@ name: Unit Tests
 on:
   push:
     branches:
-      - prod 
-      - main
       - master 
-      - feat/workflows
-  pull_request:
-    branches:
-      - prod
-      - main
-      - master
 
-  workflow_dispatch:
-    
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -33,9 +23,3 @@ jobs:
       
       - name: Run Tests
         run: ./scripts/test.sh
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with: 
-          token: f17affb5-c555-483a-bf73-f8fd160db924
-
