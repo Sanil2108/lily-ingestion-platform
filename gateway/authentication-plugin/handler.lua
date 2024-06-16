@@ -1,11 +1,10 @@
-local BasePlugin = require "kong.plugins.base_plugin"
 local redis = require "resty.redis"
 local cjson = require "cjson"
 
-local APIKeyAuthenticator = BasePlugin:extend()
-
-APIKeyAuthenticator.PRIORITY = 1000
-APIKeyAuthenticator.VERSION = "0.1.0"
+local APIKeyAuthenticator = {
+  VERSION  = "1.0.0",
+  PRIORITY = 1000,
+}
 
 local red -- Redis connection object
 
