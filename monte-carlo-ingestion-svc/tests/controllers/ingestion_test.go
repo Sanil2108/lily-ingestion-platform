@@ -51,6 +51,7 @@ func TestIngestionController(t *testing.T) {
 			{
 				"apiKey":"myApiKey",
 				"userId":"myUserId",
+				"tenantId":"myTenantId",
 				"healthStatus": {
 					"status":"ok",
 					"tableName":"myTableName",

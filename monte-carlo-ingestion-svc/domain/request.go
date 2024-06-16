@@ -17,6 +17,7 @@ type IngestionRequestHealth struct {
 type IngestionRequest struct {
 	APIKey       string                 `json:"apiKey" validate:"required"`
 	UserId       string                 `json:"userId" validate:"required"`
+	TenantId     string                 `json:"tenantId" validate:"required"`
 	HealthStatus IngestionRequestHealth `json:"healthStatus" validate:"required"`
 }
 
