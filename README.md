@@ -2,7 +2,7 @@
 
 This repository contains the implementation of a metadata ingestion system, designed to work with multiple integrations and orchestrate workflows using Temporal. The key components included in this project are:
 
-[Architecture of the system (with the implemented components highlighted)](https://i.imgur.com/crDXufh.png)
+![Architecture of the system (with the implemented components highlighted)](https://i.imgur.com/crDXufh.png)
 
 1. Monte Carlo Ingestion Service: A service for ingesting health metadata from Monte Carlo.
 2. Temporal Cluster Setup: Configuration files and scripts for deploying Temporal in a Minikube environment.
