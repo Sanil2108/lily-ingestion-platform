@@ -5,6 +5,8 @@ kubectl apply -f secrets.yaml
 kubectl apply -f statefulset.yaml
 kubectl apply -f service.yaml
 
+sleep 100
+
 # Set the namespace
 NAMESPACE="gateway-redis"
 
@@ -17,8 +19,6 @@ for i in {0..5}; do
 done
 
 echo $POD_IPS_WITH_PORT
-
-sleep 10
 
 # Convert array to JSON array and create a ConfigMap
 kubectl delete configmap redis-ips  -n "$NAMESPACE"
