@@ -17,8 +17,6 @@ spec:
         - name: kong
           image: docker.io/library/gateway:latest
           imagePullPolicy: Never
-          # command: [ "sleep" ]
-          # args: [ "3600" ] # Sleep for 1 hour
           env:
             - name: KONG_DATABASE
               value: "off"
