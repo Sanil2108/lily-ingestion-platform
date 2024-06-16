@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-cluster-joiner
+  namespace: gateway-redis
+spec:
+  volumes:
+  - name: redis-ips-volume
+    configMap:
+      name: redis-ips
+  containers:
+  - name: redis-cluster-joiner
+    image: redis:6.2
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      REDIS_IPS=$(echo $(cat /etc/redis-ips/ips))
+      echo $REDIS_IPS
+      redis-cli --cluster create ${REDIS_IPS} --cluster-replicas 1 --cluster-yes
+    volumeMounts:
+    - name: redis-ips-volume
+      mountPath: /etc/redis-ips
+  restartPolicy: Never
