@@ -6,15 +6,14 @@ import (
 	"monte-carlo-ingestion/resources"
 )
 
-
 type IngestionService struct {
-	logger           logger.Logger
+	logger   logger.Logger
 	temporal resources.Temporal
 }
 
 func NewIngestionService(logger *logger.Logger, temporal resources.Temporal) IngestionService {
 	return IngestionService{
-		logger: *logger,
+		logger:   *logger,
 		temporal: temporal,
 	}
 }
@@ -22,7 +21,7 @@ func NewIngestionService(logger *logger.Logger, temporal resources.Temporal) Ing
 func (ingestionService IngestionService) Ingest(req domain.IngestionRequest) (domain.IngestionResponse, error) {
 	ingestionService.logger.Log.Info("Ingesting data")
 
-	err := ingestionService.temporal.StartWorkflow("monte-carlo-ingestion", map[string]interface{}{})
+	workflowId, err := ingestionService.temporal.StartWorkflow("monte-carlo-ingestion", "ingestion-tq-"+req.TenantId, map[string]interface{}{})
 	if err != nil {
 		return domain.IngestionResponse{}, err
 	}
@@ -30,8 +29,8 @@ func (ingestionService IngestionService) Ingest(req domain.IngestionRequest) (do
 	ingestionService.logger.Log.Info("Ingestion completed")
 
 	response := domain.IngestionResponse{
-		Status: "ok",
+		Status:     "ok",
+		WorkflowId: workflowId,
 	}
-	return response, nil;
+	return response, nil
 }
-

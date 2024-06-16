@@ -10,9 +10,10 @@ type TemporalImpl struct {
 
 func (temporal TemporalImpl) StartWorkflow(
 	workflowName string,
+	taskQueue string,
 	input map[string]interface{},
-) error {
-	return nil
+) (string, error) {
+	return "", nil
 }
 
 func NewTemporal() (*TemporalImpl, error) {

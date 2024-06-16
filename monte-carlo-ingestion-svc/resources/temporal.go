@@ -14,7 +14,7 @@ import (
 type Temporal interface {
 	Resource
 
-	StartWorkflow(workflowName string, input map[string]interface{}) error
+	StartWorkflow(workflowName string, taskQueue string, input map[string]interface{}) (string, error)
 }
 
 func NewTemporal(logger *logger.Logger) (*TemporalImpl, error) {
@@ -47,17 +47,18 @@ func (temporal TemporalImpl) Load(context.Context, *config.Config) error {
 
 func (temporal TemporalImpl) StartWorkflow(
 	workflowName string,
+	taskQueue string,
 	input map[string]interface{},
-) error {
+) (string, error) {
 	workflowOptions := client.StartWorkflowOptions{
-		TaskQueue: "monte-carlo-ingestion",
+		TaskQueue: taskQueue,
 	}
 
 	temporal.logger.Log.Info("Starting workflow", zap.String("workflowName", workflowName))
 
 	workflowRun, err := temporal.client.ExecuteWorkflow(context.Background(), workflowOptions, workflowName)
 	if err != nil {
-		return err
+		return "", err
 	}
 	temporal.logger.Log.Info(
 		"Starting workflow",
@@ -65,5 +66,5 @@ func (temporal TemporalImpl) StartWorkflow(
 		zap.String("workflowRunId", workflowRun.GetRunID()),
 	)
 
-	return nil
+	return workflowRun.GetID(), nil
 }

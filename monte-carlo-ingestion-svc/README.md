@@ -102,3 +102,42 @@ You can check the health of the service by accessing the health endpoint:
 ```
 curl http://localhost:8080/health
 ```
+
+
+### Testing
+
+If temporal is running in minikube and port-forwarded to localhost:7233, you can send a request to start a workflow -
+
+```
+curl --location 'localhost:4000/_api/ingestion' \
+--header 'Content-Type: application/json' \
+--data '{
+    "apiKey": "myApiKey",
+    "userId": "myUserId",
+    "tenantId": "myTenant",
+    "healthStatus": {
+        "status": "ok",
+        "tableName": "myTableName",
+        "timestamp": 1718473247
+    }
+}'
+```
+
+This will return a workflowId in the response. 
+Sample response - 
+
+```
+{
+    "success": true,
+    "data": {
+        "status": "ok",
+        "workflowId": "00a1d56e-a6bf-4726-b51c-941d43baa82c"
+    },
+    "time": "2024-06-16T09:40:14.644544Z"
+}
+```
+
+The workflow can then be described using 
+```
+tctl --ad localhost:7233 wf desc --workflow_id {workflow_id}
+```

@@ -22,5 +22,6 @@ type IngestionRequest struct {
 }
 
 type IngestionResponse struct {
-	Status string `json:"status"`
+	Status     string `json:"status"`
+	WorkflowId string `json:"workflowId"`
 }

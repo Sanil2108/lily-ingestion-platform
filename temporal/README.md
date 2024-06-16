@@ -40,5 +40,5 @@ This script will:
 Once deployed, you can access the Temporal frontend service using the service IP or DNS name provided by your Minikube environment. You can also port-forward to access it locally:
 
 ```
-kubectl port-forward svc/temporal-frontend 7233:7233 -n temporal-namespace
+kubectl port-forward svc/temporal-service 7233:7233 -n temporal
 ```
